@@ -328,7 +328,7 @@ class Orchestrator {
 
         const contract = await this.getCodePromise(tribePublicKey);
         // potentialFounder, picos, required
-        let tx = contract.tx.addFounder({gasLimit, storageDepositLimit}, potentialFounder, picos, required);
+        let tx = contract.tx.inviteFounder({gasLimit, storageDepositLimit}, potentialFounder, picos, required);
 
         return await this.signSendContractMethodNoReturn(tx, seed);
     }

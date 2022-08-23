@@ -1,8 +1,8 @@
 {
   "source": {
-    "hash": "0x2ad1139a1c4003052b6a69afa5a32a78965598d0db4bc2fda48f44742cf659b3",
+    "hash": "0xa457a24366f4eb0eec65112ca343a79950b05df65e8ebb7368ab34581ccc7538",
     "language": "ink! 3.3.0",
-    "compiler": "rustc 1.64.0-nightly"
+    "compiler": "rustc 1.65.0-nightly"
   },
   "contract": {
     "name": "tribe_contract",
@@ -28,7 +28,7 @@
               }
             },
             {
-              "label": "initial_founder_picos_needed",
+              "label": "initial_founder_amount_in_pico_needed",
               "type": {
                 "displayName": [
                   "u128"
@@ -38,7 +38,7 @@
             }
           ],
           "docs": [
-            "Constructor that initializes the tribe with a given `init_name`, `initial_founder_picos_needed` must not be 0"
+            "Constructor that initializes the tribe with a given `init_name`, `initial_founder_amount_in_pico_needed` must not be 0"
           ],
           "label": "new",
           "payable": true,
@@ -50,12 +50,77 @@
       "messages": [
         {
           "args": [],
-          "docs": [],
+          "docs": [
+            " Mark the verified founder with a vote action of FOUNDER_ACCEPTED"
+          ],
           "label": "accept_tribe",
           "mutates": true,
           "payable": false,
-          "returnType": null,
+          "returnType": {
+            "displayName": [
+              "Result"
+            ],
+            "type": 12
+          },
           "selector": "0x9ee2c1ee"
+        },
+        {
+          "args": [],
+          "docs": [
+            " Can record multiple funding actions for the verified founder. Only available to founders who have already `accept_tribe`"
+          ],
+          "label": "fund_tribe",
+          "mutates": true,
+          "payable": true,
+          "returnType": {
+            "displayName": [
+              "Result"
+            ],
+            "type": 15
+          },
+          "selector": "0xc4577b10"
+        },
+        {
+          "args": [
+            {
+              "label": "founder",
+              "type": {
+                "displayName": [
+                  "AccountId"
+                ],
+                "type": 6
+              }
+            }
+          ],
+          "docs": [
+            " Returns current state of the founder as json"
+          ],
+          "label": "get_founder_status",
+          "mutates": false,
+          "payable": false,
+          "returnType": {
+            "displayName": [
+              "Result"
+            ],
+            "type": 16
+          },
+          "selector": "0x2c981cda"
+        },
+        {
+          "args": [],
+          "docs": [
+            " Returns current state of tribe as json"
+          ],
+          "label": "get_tribe",
+          "mutates": false,
+          "payable": false,
+          "returnType": {
+            "displayName": [
+              "String"
+            ],
+            "type": 1
+          },
+          "selector": "0x900ae582"
         },
         {
           "args": [
@@ -69,7 +134,7 @@
               }
             },
             {
-              "label": "picos",
+              "label": "amount_in_pico",
               "type": {
                 "displayName": [
                   "u128"
@@ -87,67 +152,34 @@
               }
             }
           ],
-          "docs": [],
-          "label": "add_founder",
-          "mutates": true,
-          "payable": false,
-          "returnType": null,
-          "selector": "0xcb6b8f28"
-        },
-        {
-          "args": [],
-          "docs": [],
-          "label": "fund_tribe",
-          "mutates": true,
-          "payable": true,
-          "returnType": null,
-          "selector": "0xc4577b10"
-        },
-        {
-          "args": [
-            {
-              "label": "founder",
-              "type": {
-                "displayName": [
-                  "AccountId"
-                ],
-                "type": 6
-              }
-            }
+          "docs": [
+            " Attempt to include the `potential_founder` AccountId in the tribe contract’s founders collection. The initial founder must also provide the `amount_in_pico` to tribe and a flag to determine if this is a `required` founder"
           ],
-          "docs": [],
-          "label": "get_founder_status",
-          "mutates": false,
+          "label": "invite_founder",
+          "mutates": true,
           "payable": false,
           "returnType": {
             "displayName": [
-              "String"
+              "Result"
             ],
-            "type": 1
+            "type": 12
           },
-          "selector": "0x2c981cda"
+          "selector": "0x88005a42"
         },
         {
           "args": [],
-          "docs": [],
-          "label": "get_tribe",
-          "mutates": false,
-          "payable": false,
-          "returnType": {
-            "displayName": [
-              "String"
-            ],
-            "type": 1
-          },
-          "selector": "0x900ae582"
-        },
-        {
-          "args": [],
-          "docs": [],
+          "docs": [
+            " Attempts to mark the verified founder with a vote action of FOUNDER_REJECTED"
+          ],
           "label": "reject_tribe",
           "mutates": true,
           "payable": false,
-          "returnType": null,
+          "returnType": {
+            "displayName": [
+              "Result"
+            ],
+            "type": 12
+          },
           "selector": "0x82907975"
         }
       ]
@@ -378,6 +410,208 @@
           "path": [
             "ink_primitives",
             "Key"
+          ]
+        }
+      },
+      {
+        "id": 12,
+        "type": {
+          "def": {
+            "variant": {
+              "variants": [
+                {
+                  "fields": [
+                    {
+                      "type": 13
+                    }
+                  ],
+                  "index": 0,
+                  "name": "Ok"
+                },
+                {
+                  "fields": [
+                    {
+                      "type": 14
+                    }
+                  ],
+                  "index": 1,
+                  "name": "Err"
+                }
+              ]
+            }
+          },
+          "params": [
+            {
+              "name": "T",
+              "type": 13
+            },
+            {
+              "name": "E",
+              "type": 14
+            }
+          ],
+          "path": [
+            "Result"
+          ]
+        }
+      },
+      {
+        "id": 13,
+        "type": {
+          "def": {
+            "tuple": []
+          }
+        }
+      },
+      {
+        "id": 14,
+        "type": {
+          "def": {
+            "variant": {
+              "variants": [
+                {
+                  "index": 0,
+                  "name": "ActiveTribeCannotAcceptFounderAction"
+                },
+                {
+                  "index": 1,
+                  "name": "AmountPromisedIsZero"
+                },
+                {
+                  "index": 2,
+                  "name": "CanNotInviteInitialFounder"
+                },
+                {
+                  "index": 3,
+                  "name": "FounderAlreadyInvited"
+                },
+                {
+                  "index": 4,
+                  "name": "FounderListNotFound"
+                },
+                {
+                  "index": 5,
+                  "name": "FounderRejectedInvitation"
+                },
+                {
+                  "index": 6,
+                  "name": "FounderVoteActionPending"
+                },
+                {
+                  "index": 7,
+                  "name": "FundingAlreadyCompleted"
+                },
+                {
+                  "index": 8,
+                  "name": "FundingAmountMustBeGreaterThanZero"
+                },
+                {
+                  "index": 9,
+                  "name": "NotAFounder"
+                },
+                {
+                  "index": 10,
+                  "name": "NotInitialFounder"
+                },
+                {
+                  "index": 11,
+                  "name": "TribeIsDefunct"
+                },
+                {
+                  "index": 12,
+                  "name": "TribeIsLocked"
+                }
+              ]
+            }
+          },
+          "path": [
+            "tribe_contract",
+            "errors",
+            "TribeError"
+          ]
+        }
+      },
+      {
+        "id": 15,
+        "type": {
+          "def": {
+            "variant": {
+              "variants": [
+                {
+                  "fields": [
+                    {
+                      "type": 10
+                    }
+                  ],
+                  "index": 0,
+                  "name": "Ok"
+                },
+                {
+                  "fields": [
+                    {
+                      "type": 14
+                    }
+                  ],
+                  "index": 1,
+                  "name": "Err"
+                }
+              ]
+            }
+          },
+          "params": [
+            {
+              "name": "T",
+              "type": 10
+            },
+            {
+              "name": "E",
+              "type": 14
+            }
+          ],
+          "path": [
+            "Result"
+          ]
+        }
+      },
+      {
+        "id": 16,
+        "type": {
+          "def": {
+            "variant": {
+              "variants": [
+                {
+                  "fields": [
+                    {
+                      "type": 1
+                    }
+                  ],
+                  "index": 0,
+                  "name": "Ok"
+                },
+                {
+                  "fields": [
+                    {
+                      "type": 14
+                    }
+                  ],
+                  "index": 1,
+                  "name": "Err"
+                }
+              ]
+            }
+          },
+          "params": [
+            {
+              "name": "T",
+              "type": 1
+            },
+            {
+              "name": "E",
+              "type": 14
+            }
+          ],
+          "path": [
+            "Result"
           ]
         }
       }
